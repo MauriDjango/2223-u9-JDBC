@@ -6,13 +6,13 @@ import javax.sql.DataSource
 
 object DataSourceFactory {
     enum class DataSourceType {
-        HIKARI,
-        JDBC
+        Embedded,
+        InMemory
     }
 
     fun getDS(dataSourceType: DataSourceType): DataSource {
         return when (dataSourceType) {
-            DataSourceType.HIKARI -> {
+            DataSourceType.InMemory -> {
                 val config = HikariConfig()
                 config.jdbcUrl = "jdbc:h2:mem:default"
                 config.username = "user"
@@ -24,7 +24,17 @@ object DataSourceFactory {
                 HikariDataSource(config)
             }
 
-            DataSourceType.JDBC -> TODO()
+            DataSourceType.Embedded -> {
+                val config = HikariConfig()
+                config.jdbcUrl = "jdbc:h2:./default"
+                config.username = "user"
+                config.password = "user"
+                config.driverClassName = "org.h2.Driver"
+                config.maximumPoolSize = 10
+                config.isAutoCommit = true
+                config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+                HikariDataSource(config)
+            }
         }
     }
 }

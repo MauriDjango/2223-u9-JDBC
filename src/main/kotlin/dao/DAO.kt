@@ -5,5 +5,6 @@ import java.sql.ResultSet
 
 interface DAO {
     fun createProduct(product: Product): Int
-    fun getById(id: Int): ResultSet?
+    fun getById(id: Int): Product?
+    fun createTable()
 }
